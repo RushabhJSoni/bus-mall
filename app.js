@@ -24,12 +24,10 @@ function Product(name, imgPath) {
   this.views = 0;
 
   Product.allProducts.push(this);
+
 }
 
 Product.allProducts = [];
-
-
-
 
 //---------------prototype----//
 
@@ -38,8 +36,6 @@ Product.prototype.renderProduct = function (img, h2) {
   h2.textContent = this.name;
   this.views++;
 }
-
-
 
 
 //----------------standard global functions----------------//
@@ -66,31 +62,6 @@ function getThreeProducts(){
 }
 
 
-
-
-
-
-
-
-
-
-
-//   let product1Index = Math.floor(Math.random() * Product.allProducts.length);
-//   product1  = Product.allProducts[product1Index];
-//   let product2Index = Math.floor(Math.random() * Product.allProducts.length);
-//   product2  = Product.allProducts[product2Index];
-//   let product3Index = Math.floor(Math.random() * Product.allProducts.length);
-//   product3  = Product.allProducts[product3Index];
-//   while(product2 === null || product2 === product1 ||product2 === product3){
-//     product2Index = Math.floor(Math.random() * Product.allProducts.length);
-//   product2  = Product.allProducts[product2Index];
-//   }
-//   while(product3 === null || product3 === product2 ||product3 === product1){
-//     product3Index = Math.floor(Math.random() * Product.allProducts.length);
-//   product3  = Product.allProducts[product3Index];
-//   }
-// }
-
 function renderAllProducts(){
   currentProduct1.renderProduct(firstProductImg, firstProductH2);
   currentProduct2.renderProduct(secondProductImg, secondProductH2);
@@ -106,6 +77,48 @@ function renderResults() {
     ulElem.appendChild(liElem)
   }
 
+}
+
+function productGraph() {
+  const ctx = document.getElementById('graph').getContext('2d');
+
+  let productName = [];
+  let productVotes = [];
+  
+  for( let product of Product.allProducts) {
+    productName.push(product.name);
+    productVotes.push(product.votes);
+  }
+
+const labelColors = ['red'];
+
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+      labels: labelColors,
+      datasets: [{
+          label: '# of Votes',
+          data: productVotes,
+          backgroundColor: labelColors,
+          borderColor: [
+              'rgba(255, 99, 132, 1)'
+              // 'rgba(54, 162, 235, 1)',
+              // 'rgba(255, 206, 86, 1)',
+              // 'rgba(75, 192, 192, 1)',
+              // 'rgba(153, 102, 255, 1)',
+              // 'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+      }]
+  },
+  options: {
+      scales: {
+          y: {
+              beginAtZero: true
+          }
+      }
+  }
+});
 }
 
 //------------listner---------------//
@@ -131,8 +144,9 @@ function handleClick(e) {
 
 
 if(noOfClicks === 10) {
-  renderResults();
   resultSectionElem.removeEventListener('click', handleClick);
+  renderResults();
+  productGraph();
 }
 }
 
@@ -163,3 +177,8 @@ new Product('water-can', './img/water-can.jpg');
 
 getThreeProducts();
 renderAllProducts();
+
+
+// const data = [1, 2, 3, 4, 5, 6];
+
+

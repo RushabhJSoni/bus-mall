@@ -11,9 +11,9 @@ const firstProductH2 = document.getElementById('product1h2');
 const secondProductH2 = document.getElementById('product2h2');
 const thirdProductH2 = document.getElementById('product3h2');
 
-let product1 = null;
-let product2 = null;
-let product3 = null;
+let currentProduct1 = null;
+let currentProduct2 = null;
+let currentProduct3 = null;
 
 
 //-------------------constructor function-------------//
@@ -21,6 +21,7 @@ function Product(name, imgPath) {
   this.name = name;
   this.imgPath = imgPath;
   this.votes = 0;
+  this.views = 0;
 
   Product.allProducts.push(this);
 }
@@ -35,6 +36,7 @@ Product.allProducts = [];
 Product.prototype.renderProduct = function (img, h2) {
   img.src = this.imgPath;
   h2.textContent = this.name;
+  this.views++;
 }
 
 
@@ -42,26 +44,57 @@ Product.prototype.renderProduct = function (img, h2) {
 
 //----------------standard global functions----------------//
 function getThreeProducts(){
-  let product1Index = Math.floor(Math.random() * Product.allProducts.length);
-  product1  = Product.allProducts[product1Index];
-  let product2Index = Math.floor(Math.random() * Product.allProducts.length);
-  product2  = Product.allProducts[product2Index];
-  let product3Index = Math.floor(Math.random() * Product.allProducts.length);
-  product3  = Product.allProducts[product3Index];
-  while(product2 === null || product2 === product1 ||product2 === product3){
-    product2Index = Math.floor(Math.random() * Product.allProducts.length);
-  product2  = Product.allProducts[product2Index];
+  const doNotRepeat = [currentProduct1,currentProduct2,currentProduct3];
+  while(doNotRepeat.includes(currentProduct1)) {
+    let product1Index = Math.floor(Math.random() * Product.allProducts.length);
+    currentProduct1 = Product.allProducts[product1Index];
   }
-  while(product3 === null || product3 === product2 ||product3 === product1){
-    product3Index = Math.floor(Math.random() * Product.allProducts.length);
-  product3  = Product.allProducts[product3Index];
+  doNotRepeat.push(currentProduct1);
+
+  while(doNotRepeat.includes(currentProduct2)) {
+    let product2Index = Math.floor(Math.random() * Product.allProducts.length);
+    currentProduct2 = Product.allProducts[product2Index];
   }
+  doNotRepeat.push(currentProduct2);
+
+  while(doNotRepeat.includes(currentProduct3)) {
+    let product3Index = Math.floor(Math.random() * Product.allProducts.length);
+    currentProduct3 = Product.allProducts[product3Index];
+  }
+
+  doNotRepeat.push(currentProduct3);
 }
 
+
+
+
+
+
+
+
+
+
+
+//   let product1Index = Math.floor(Math.random() * Product.allProducts.length);
+//   product1  = Product.allProducts[product1Index];
+//   let product2Index = Math.floor(Math.random() * Product.allProducts.length);
+//   product2  = Product.allProducts[product2Index];
+//   let product3Index = Math.floor(Math.random() * Product.allProducts.length);
+//   product3  = Product.allProducts[product3Index];
+//   while(product2 === null || product2 === product1 ||product2 === product3){
+//     product2Index = Math.floor(Math.random() * Product.allProducts.length);
+//   product2  = Product.allProducts[product2Index];
+//   }
+//   while(product3 === null || product3 === product2 ||product3 === product1){
+//     product3Index = Math.floor(Math.random() * Product.allProducts.length);
+//   product3  = Product.allProducts[product3Index];
+//   }
+// }
+
 function renderAllProducts(){
-  product1.renderProduct(firstProductImg, firstProductH2);
-  product2.renderProduct(secondProductImg, secondProductH2);
-  product3.renderProduct(thirdProductImg, thirdProductH2);
+  currentProduct1.renderProduct(firstProductImg, firstProductH2);
+  currentProduct2.renderProduct(secondProductImg, secondProductH2);
+  currentProduct3.renderProduct(thirdProductImg, thirdProductH2);
 }
 
 function renderResults() {
@@ -82,16 +115,16 @@ function handleClick(e) {
     noOfClicks++;
   }
   if(imgClick === 'product1'){
-    product1.votes++;
-    console.log(product1)
+    currentProduct1.votes++;
+    console.log(currentProduct2)
   }
   if(imgClick === 'product2'){
-    product2.votes++;
-    console.log(product2)
+    currentProduct2.votes++;
+    console.log(currentProduct2)
   }
   if(imgClick === 'product3'){
-    product3.votes++;
-    console.log(product3)
+    currentProduct3.votes++;
+    console.log(currentProduct3)
   }
   getThreeProducts();
   renderAllProducts();
@@ -123,7 +156,7 @@ new Product('dragon', './img/dragon.jpg');
 new Product('pet-sweep', './img/pet-sweep.jpg');
 new Product('scissors', './img/scissors.jpg');
 new Product('shark', './img/shark.jpg');
-new Product('sweep', './img/sweep.jpg');
+new Product('sweep', './img/sweep.png');
 new Product('tauntaun', './img/tauntaun.jpg');
 new Product('unicorn', './img/unicorn.jpg');
 new Product('water-can', './img/water-can.jpg');

@@ -1,0 +1,11 @@
+main {
+  display: flex;
+}
+
+.products {
+  display: inline-flex;
+}
+.products img {
+  height: 5%;
+  width: 5;
+}

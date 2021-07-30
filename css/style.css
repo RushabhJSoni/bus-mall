@@ -14,24 +14,25 @@ section {
   display: flex;
 }
 
-section img {
+/* section img {
   width: 200px;
   height: 200px;
   
-}
+} */
 
 article {
   height: 300px;
-  width: 80%;
-  margin-left: 20%;
+  /* margin-left: 20%; */
+  margin: 30px;
 }
 
-.products img {
-  height: 5%;
-  width: 5;
+#products img {
+  height: 50%;
+  width: 50%;
 }
 
 #chart {
   height: 700px;
   width: 700px;
+  margin: 0;
 }

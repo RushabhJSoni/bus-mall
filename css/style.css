@@ -1,11 +1,32 @@
 main {
+  width: 100%;
+  }
+
+#top {
+  display: flex;
+}
+aside {
+  width: 200px;
+  margin: 0;
+}
+
+section {
   display: flex;
 }
 
-.products {
-  display: inline-flex;
+article {
+  height: 300px;
+  /* margin-left: 20%; */
+  margin: 30px;
 }
-.products img {
-  height: 5%;
-  width: 5;
+
+img {
+  height: 300px;
+  width: 300px;
+}
+
+#chart {
+  height: 700px;
+  width: 700px;
+  margin: 0;
 }

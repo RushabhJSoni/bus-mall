@@ -32,7 +32,6 @@ Product.allProducts = [];
 //---------------prototype----//
 
 Product.prototype.renderProduct = function (imgPath, h2) {
-  debugger;
   imgPath.src = this.imgPath;
   h2.textContent = this.name;
   this.views++;
@@ -81,10 +80,9 @@ function renderResults() {
 
   for(let votes of Product.allProducts) {
     let liElem = document.createElement('li');
-    liElem.textContent = `${votes.name}: ${votes.votes} votes : ${votes.views} views`;
+    liElem.textContent = `${votes.name} votes : ${votes.votes}  views : ${votes.views} `;
     ulElem.appendChild(liElem)
   }
-
 }
 
 function productGraph() {
@@ -93,61 +91,88 @@ function productGraph() {
   let productName = [];
   let productVotes = [];
   let productViews = [];
-  
-  for( let votes of Product.allProducts) {
-    productName.push(votes.name);
-    productVotes.push(votes.votes);
-    productViews.push(votes.views);
-  }
-}
-
-  // const labelColors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple'];
-
-  // var myChart = new Chart(ctx, {
-  //     type: 'bar',
-  //     data: {
-  //         labels: labelColors,
-  //         datasets: [{
-  //             label: '# of Votes',
-  //             data: votes.views,
-  //             backgroundColor: labelColors,
-  //             borderColor: [
-  //                 'rgba(255, 99, 132, 1)',
-  //            ],
-  //             borderWidth: 1
-  //         }]
-  //     },
-  //     options: {
-  //         scales: {
-  //             y: {
-  //                 beginAtZero: true
-  //             }
-  //         }
-  //     }
-  // });
-
-
-function getVotesFromStorage() {
-  let votesInStorage = localStorage.getItem('currentVotes');
-    if(votesInStorage){
-      let parsedVotes = JSON.parse(votesInStorage);
-      console.log(parsedVotes);
-    for (let votes of parsedVotes) {
-      let newVotes = new Product(votes.name,votes.imgPath, votes.vote, votes.view);
-      Product.allProducts.push(newVotes);
-      console.log(Product.allProducts)
-      // newVotes.renderProduct();
-    }
    
+    for( let votes of Product.allProducts) {
+      productName.push(votes.name);
+      productVotes.push(votes.votes);
+      productViews.push(votes.views);
+    }
+    
+    let pwdVotes = {
+      label: 'Votes',
+      data: productVotes,
+      backgroundColor: ['rgba(54, 162, 235, 1)'],
+      borderColor: ['rgba(54, 162, 235, 1)'],
+      borderWidth: 1,
+      yAxisID: "y-axis-votes"
+    };
 
-  }
+    let pwdViews = {
+      label: 'Views',
+      data: productViews,
+      backgroundColor: ['rgba(255, 99, 132, 1)'],
+      borderColor: ['rgba(255, 99, 132, 1)'],
+      borderWidth: 1,
+      yAxisID: "y-axis-views"
+    };
+
+    let chartData = {
+      labels: productName,
+      datasets: [pwdVotes, pwdViews]
+    };
+
+  let chartOptions = {
+      scales: {
+        xAxes: [{
+          
+          barPercentage: 1,
+          categoryPercentage: 0.6
+        }],
+        yAxes: [{
+          id: "y-axis-votes"
+        }, {
+          id: "y-axis-views"
+        }]
+      }
+    }
+
+  let barChart = new Chart(ctx, {
+    type: 'bar',
+    data: chartData,
+    options: chartOptions
+  });
 }
+// function getVotesFromStorage() {
+//   let votesInStorage = localStorage.getItem('currentVotes');
+//     if(votesInStorage){
+//       let parsedVotes = JSON.parse(votesInStorage);
+//       console.log(parsedVotes);
+//     for (let votes of parsedVotes) {
+//       let newVotes = new Product(votes.name,votes.imgPath, votes.vote, votes.view);
+//       Product.allProducts.push(newVotes);
+//       console.log(Product.allProducts)
+//     }
+//   }
+// }
 
 function putVotesInStorage(){
-  let storageStringArray = JSON.stringify(Product.allProducts);
-  localStorage.setItem('currentVotes', storageStringArray);
-}
+  let votesInStorage = localStorage.getItem('currentVotes');
+  if(votesInStorage){
+    let parsedVotes = JSON.parse(votesInStorage);
+    console.log(parsedVotes);
+    // let totalVotes = [];
+    for(let i = 0; i < parsedVotes.length; i++){
+      Product.allProducts[i].votes = parsedVotes[i].votes + Product.allProducts[i].votes;
+      Product.allProducts[i].views = parsedVotes[i].views + Product.allProducts[i].views;
+    }
+    let storageStringArray = JSON.stringify(Product.allProducts);
+    localStorage.setItem('currentVotes', storageStringArray);
+  } else {
+      let storageStringArray = JSON.stringify(Product.allProducts);
+    localStorage.setItem('currentVotes', storageStringArray);
+  }
 
+}
 
 //------------listner---------------//
 function handleClick(e) {
@@ -175,8 +200,8 @@ function handleClick(e) {
 
   if(noOfClicks === 10) {
     resultSectionElem.removeEventListener('click', handleClick);
-    renderResults();
     putVotesInStorage();
+    renderResults();
     productGraph();
   }
 }
@@ -187,6 +212,7 @@ resultSectionElem.addEventListener('click', handleClick);
 
 
 //--------------call functions------------//
+// getVotesFromStorage();
 
 
 Product.allProducts.push(new Product('bag', './img/bag.jpg'));
@@ -214,5 +240,4 @@ Product.allProducts.push(new Product('water-can', './img/water-can.jpg'));
 
 getThreeProducts();
 renderAllProducts();
-getVotesFromStorage();
 

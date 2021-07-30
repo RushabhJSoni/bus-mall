@@ -26,9 +26,9 @@ article {
   margin: 30px;
 }
 
-#products img {
-  height: 50%;
-  width: 50%;
+img {
+  height: 300px;
+  width: 300px;
 }
 
 #chart {

@@ -75,16 +75,15 @@ function renderAllProducts(){
 
 
 
-// function renderResults() {
-//   // ulElem.textContent = '';
+function renderResults() {
+  // ulElem.textContent = '';
 
-//   for(let votes of Product.allProducts) {
-//     let liElem = document.createElement('li');
-//     liElem.textContent = `${votes.name}: ${votes.votes} votes : ${votes.views} views`;
-//     ulElem.appendChild(liElem)
-//   }
-
-// }
+  for(let votes of Product.allProducts) {
+    let liElem = document.createElement('li');
+    liElem.textContent = `${votes.name} votes : ${votes.votes}  views : ${votes.views} `;
+    ulElem.appendChild(liElem)
+  }
+}
 
 function productGraph() {
   const ctx = document.getElementById('graph').getContext('2d');
@@ -143,24 +142,37 @@ function productGraph() {
     options: chartOptions
   });
 }
-function getVotesFromStorage() {
-  let votesInStorage = localStorage.getItem('currentVotes');
-    if(votesInStorage){
-      let parsedVotes = JSON.parse(votesInStorage);
-      console.log(parsedVotes);
-    for (let votes of parsedVotes) {
-      let newVotes = new Product(votes.name,votes.imgPath, votes.vote, votes.view);
-      Product.allProducts.push(newVotes);
-      console.log(Product.allProducts)
-    }
-  }
-}
+// function getVotesFromStorage() {
+//   let votesInStorage = localStorage.getItem('currentVotes');
+//     if(votesInStorage){
+//       let parsedVotes = JSON.parse(votesInStorage);
+//       console.log(parsedVotes);
+//     for (let votes of parsedVotes) {
+//       let newVotes = new Product(votes.name,votes.imgPath, votes.vote, votes.view);
+//       Product.allProducts.push(newVotes);
+//       console.log(Product.allProducts)
+//     }
+//   }
+// }
 
 function putVotesInStorage(){
-  let storageStringArray = JSON.stringify(Product.allProducts);
-  localStorage.setItem('currentVotes', storageStringArray);
-}
+  let votesInStorage = localStorage.getItem('currentVotes');
+  if(votesInStorage){
+    let parsedVotes = JSON.parse(votesInStorage);
+    console.log(parsedVotes);
+    // let totalVotes = [];
+    for(let i = 0; i < parsedVotes.length; i++){
+      Product.allProducts[i].votes = parsedVotes[i].votes + Product.allProducts[i].votes;
+      Product.allProducts[i].views = parsedVotes[i].views + Product.allProducts[i].views;
+    }
+    let storageStringArray = JSON.stringify(Product.allProducts);
+    localStorage.setItem('currentVotes', storageStringArray);
+  } else {
+      let storageStringArray = JSON.stringify(Product.allProducts);
+    localStorage.setItem('currentVotes', storageStringArray);
+  }
 
+}
 
 //------------listner---------------//
 function handleClick(e) {
@@ -188,8 +200,8 @@ function handleClick(e) {
 
   if(noOfClicks === 10) {
     resultSectionElem.removeEventListener('click', handleClick);
-    // renderResults();
     putVotesInStorage();
+    renderResults();
     productGraph();
   }
 }
@@ -200,6 +212,7 @@ resultSectionElem.addEventListener('click', handleClick);
 
 
 //--------------call functions------------//
+// getVotesFromStorage();
 
 
 Product.allProducts.push(new Product('bag', './img/bag.jpg'));
@@ -227,5 +240,4 @@ Product.allProducts.push(new Product('water-can', './img/water-can.jpg'));
 
 getThreeProducts();
 renderAllProducts();
-getVotesFromStorage();
 

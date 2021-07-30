@@ -32,7 +32,6 @@ Product.allProducts = [];
 //---------------prototype----//
 
 Product.prototype.renderProduct = function (imgPath, h2) {
-  debugger;
   imgPath.src = this.imgPath;
   h2.textContent = this.name;
   this.views++;
@@ -76,16 +75,16 @@ function renderAllProducts(){
 
 
 
-function renderResults() {
-  // ulElem.textContent = '';
+// function renderResults() {
+//   // ulElem.textContent = '';
 
-  for(let votes of Product.allProducts) {
-    let liElem = document.createElement('li');
-    liElem.textContent = `${votes.name}: ${votes.votes} votes : ${votes.views} views`;
-    ulElem.appendChild(liElem)
-  }
+//   for(let votes of Product.allProducts) {
+//     let liElem = document.createElement('li');
+//     liElem.textContent = `${votes.name}: ${votes.votes} votes : ${votes.views} views`;
+//     ulElem.appendChild(liElem)
+//   }
 
-}
+// }
 
 function productGraph() {
   const ctx = document.getElementById('graph').getContext('2d');
@@ -93,40 +92,57 @@ function productGraph() {
   let productName = [];
   let productVotes = [];
   let productViews = [];
-  
-  for( let votes of Product.allProducts) {
-    productName.push(votes.name);
-    productVotes.push(votes.votes);
-    productViews.push(votes.views);
-  }
+   
+    for( let votes of Product.allProducts) {
+      productName.push(votes.name);
+      productVotes.push(votes.votes);
+      productViews.push(votes.views);
+    }
+    
+    let pwdVotes = {
+      label: 'Votes',
+      data: productVotes,
+      backgroundColor: ['rgba(54, 162, 235, 1)'],
+      borderColor: ['rgba(54, 162, 235, 1)'],
+      borderWidth: 1,
+      yAxisID: "y-axis-votes"
+    };
+
+    let pwdViews = {
+      label: 'Views',
+      data: productViews,
+      backgroundColor: ['rgba(255, 99, 132, 1)'],
+      borderColor: ['rgba(255, 99, 132, 1)'],
+      borderWidth: 1,
+      yAxisID: "y-axis-views"
+    };
+
+    let chartData = {
+      labels: productName,
+      datasets: [pwdVotes, pwdViews]
+    };
+
+  let chartOptions = {
+      scales: {
+        xAxes: [{
+          
+          barPercentage: 1,
+          categoryPercentage: 0.6
+        }],
+        yAxes: [{
+          id: "y-axis-votes"
+        }, {
+          id: "y-axis-views"
+        }]
+      }
+    }
+
+  let barChart = new Chart(ctx, {
+    type: 'bar',
+    data: chartData,
+    options: chartOptions
+  });
 }
-
-  // const labelColors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple'];
-
-  // var myChart = new Chart(ctx, {
-  //     type: 'bar',
-  //     data: {
-  //         labels: labelColors,
-  //         datasets: [{
-  //             label: '# of Votes',
-  //             data: votes.views,
-  //             backgroundColor: labelColors,
-  //             borderColor: [
-  //                 'rgba(255, 99, 132, 1)',
-  //            ],
-  //             borderWidth: 1
-  //         }]
-  //     },
-  //     options: {
-  //         scales: {
-  //             y: {
-  //                 beginAtZero: true
-  //             }
-  //         }
-  //     }
-  // });
-
-
 function getVotesFromStorage() {
   let votesInStorage = localStorage.getItem('currentVotes');
     if(votesInStorage){
@@ -136,10 +152,7 @@ function getVotesFromStorage() {
       let newVotes = new Product(votes.name,votes.imgPath, votes.vote, votes.view);
       Product.allProducts.push(newVotes);
       console.log(Product.allProducts)
-      // newVotes.renderProduct();
     }
-   
-
   }
 }
 
@@ -175,7 +188,7 @@ function handleClick(e) {
 
   if(noOfClicks === 10) {
     resultSectionElem.removeEventListener('click', handleClick);
-    renderResults();
+    // renderResults();
     putVotesInStorage();
     productGraph();
   }

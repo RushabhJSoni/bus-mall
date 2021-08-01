@@ -1,10 +1,25 @@
+html {
+  background-color: #f7f7f7;
+}
+
+header{
+  background-color:  #000000;
+    color: rgba(208, 212, 223, 0.877);
+}
+
 main {
   width: 100%;
+  font-family: 'Barlow', sans-serif;
   }
 
 #top {
   display: flex;
 }
+h1 { 
+  border-width: 5px;
+  border: dashed blue;
+}
+
 aside {
   width: 200px;
   margin: 0;
@@ -13,20 +28,40 @@ aside {
 section {
   display: flex;
 }
+ol{
+    background-color: gold;
+    font-weight: 500;
+}
 
 article {
   height: 300px;
   /* margin-left: 20%; */
-  margin: 30px;
+  margin-top: 30px;
+  margin-bottom: 0;
 }
+
 
 img {
   height: 300px;
   width: 300px;
+  margin-left: 30px;
+  margin-bottom: 30px;
 }
 
 #chart {
   height: 700px;
   width: 700px;
-  margin: 0;
+  margin-left: 120px;
+  flex-wrap: wrap;
+}
+
+#imggraph {
+ display: block;
+ height: 80%;
+ 
+}
+
+footer{
+  background-color:  #000000;
+    color: rgba(208, 212, 223, 0.877);
 }
